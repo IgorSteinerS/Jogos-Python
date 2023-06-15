@@ -64,8 +64,30 @@ def jogar():
             print(*hidden, sep="")
 
     while jogar == True:
-        #selecionador de palavra aleatória
-        palavras = ["abacate", "carambola", "estetoscopio", "python"]
+        palavras = [
+    "abacate", "acesso", "adeus", "agora", "amigo", "amor", "aniversario",
+    "aprender", "ar", "arte", "aventura", "azul", "bala", "beleza",
+    "brincar", "cachorro", "calma", "caminho", "campo", "caneta", "carinho",
+    "carta", "casa", "celebrar", "chocolate", "chuva", "cidade", "coelho",
+    "colorido", "coracao", "coragem", "correr", "crianca", "danca", "dia",
+    "diferente", "doce", "energia", "esperanca", "estrela", "familia",
+    "feliz", "floresta", "fogo", "fotografia", "girassol", "gratidao", "guitarra",
+    "harmonia", "imaginar", "infinito", "janela", "lado", "liberdade", "luz",
+    "magia", "mar", "memoria", "momento", "mundo", "musica", "natureza", "noite",
+    "nuvem", "olhar", "paciencia", "paz", "perdao", "piano", "poesia", "por-do-sol",
+    "porta", "preparar", "profundidade", "protecao", "raiz", "recordar", "refletir",
+    "respeito", "rio", "riso", "rocha", "saudade", "segredo", "semente", "ser",
+    "sorriso", "sonhar", "sorvete", "tempo", "terra", "tesouro", "tranquilidade",
+    "unico", "universo", "valor", "vento", "verdade", "viagem", "vida", "viver",
+    "andar", "aviao", "ave", "bambu", "barco", "barulho", "bela",
+    "borboleta", "brilho", "caminhar", "cancao", "capaz", "carinho", "castelo",
+    "cor", "cores", "corpo", "criatividade", "dar", "decidir", "descobrir",
+    "desejo", "despertar", "doce", "elogiar", "encontrar", "equilibrio", "escalar",
+    "esperar", "fe", "flor", "folha", "forte", "fruta", "garrafa", "gentileza",
+    "gracejar", "grama", "grao", "guardar", "habito", "heroi", "hoje", "honrar",
+    "humildade", "inocencia", "inspirar", "inventar", "jardim", "joia", "lado",
+    "lealdade", "leveza", "liberdade", "livre", "lua", "luzir", "maravilha"
+]
         palavra = random.randrange(0, len(palavras))
         palavraSecreta = palavras[palavra]
         palavraSecretaLis = list(palavraSecreta)
