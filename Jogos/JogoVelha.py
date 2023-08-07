@@ -11,6 +11,18 @@ def jogar():
         usedPositions = []
         totalMoves = 0
         
+        while True:
+            mesmo = input("Você quer jogar mesmo? \n [S|N] \n ")
+            if mesmo == "n" or mesmo == "N":
+                jogando = False
+                break
+            if mesmo == "s" or mesmo == "S":
+                jogando = True
+                break
+            else:
+                print("Sim ou Não")
+        if mesmo == "n" or mesmo == "N":
+            break
         def win():
             nonlocal resultado
             if "1O" in usedPositions and "2O" in usedPositions and "3O" in usedPositions:
@@ -49,7 +61,9 @@ def jogar():
                 resultado = 3
             
         
-        info = [["|1","|2|","3|"],["|4","|5|","6|"],["|7","|8|","9|"]]
+        info = [["|1","|2|","3|"],
+                ["|4","|5|","6|"],
+                ["|7","|8|","9|"]]
 
         gridTop = {1 : "|_",
                     2 : "|_|",
@@ -179,7 +193,7 @@ def jogar():
                     posiçãoX = random.randint(1, 9)
                 if posiçãoX == 1:
                     if "1X" in usedPositions or "1O" in usedPositions:
-                        #print("Escolha inválida!!!")
+                        
                         jogador = 2
                     else:
                         gridTop.update({1 : "|X"})
@@ -189,7 +203,7 @@ def jogar():
                         jogador = 1
                 elif posiçãoX == 2:
                     if "2X" in usedPositions or "2O" in usedPositions:
-                        #print("Escolha inválida!!!")
+                        
                         jogador = 2
                     else:
                         gridTop.update({2 : "|X|"})
@@ -199,7 +213,7 @@ def jogar():
                         jogador = 1
                 elif posiçãoX == 3:
                     if "3X" in usedPositions or "3O" in usedPositions:
-                        #print("Escolha inválida!!!")
+                        
                         jogador = 2
                     else:
                         gridTop.update({3 : "X|"})
@@ -209,7 +223,7 @@ def jogar():
                         jogador = 1
                 elif posiçãoX == 4:
                     if "4X" in usedPositions or "4O" in usedPositions:
-                        #print("Escolha inválida!!!")
+                        
                         jogador = 2
                     else:
                         gridMid.update({4 : "|X"})
@@ -219,7 +233,7 @@ def jogar():
                         jogador = 1
                 elif posiçãoX == 5:
                     if "5X" in usedPositions or "5O" in usedPositions:
-                        #print("Escolha inválida!!!")
+                        
                         jogador = 2
                     else:
                         gridMid.update({5 : "|X|"})
@@ -229,7 +243,7 @@ def jogar():
                         jogador = 1
                 elif posiçãoX == 6:
                     if "6X" in usedPositions or "6O" in usedPositions:
-                        #print("Escolha inválida!!!")
+                        
                         jogador = 2
                     else:
                         gridMid.update({6 : "X|"})
@@ -239,7 +253,7 @@ def jogar():
                         jogador = 1
                 elif posiçãoX == 7:
                     if "7X" in usedPositions or "7O" in usedPositions:
-                        #print("Escolha inválida!!!")
+                        
                         jogador = 2
                     else:
                         gridBot.update({7 : "|X"})
@@ -249,7 +263,7 @@ def jogar():
                         jogador = 1
                 elif posiçãoX == 8:
                     if "8X" in usedPositions or "8O" in usedPositions:
-                        #print("Escolha inválida!!!")
+                        
                         jogador = 2
                     else:
                         gridBot.update({8 : "|X|"})
@@ -259,7 +273,7 @@ def jogar():
                         jogador = 1
                 elif posiçãoX == 9:
                     if "9X" in usedPositions or "9O" in usedPositions:
-                        #print("Escolha inválida!!!")
+                        
                         jogador = 2
                     else:
                         gridBot.update({9 : "X|"})
@@ -270,7 +284,6 @@ def jogar():
                 win()
                 if resultado != 4:
                     break    
-                #totalMoves += 1
             print(*gridTop.values(), sep="")
             print(*gridMid.values(), sep="")
             print(*gridBot.values(), sep="")
