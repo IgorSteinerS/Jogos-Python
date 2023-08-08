@@ -4,331 +4,165 @@ def jogar():
     print("******************************")
     print("********JOGO DA VELHA!********")
     print("******************************")
-    jogando = True
-    while jogando == True:
-        resultado = 4
-        jogador = 0
-        usedPositions = []
-        totalMoves = 0
-        
+
+    winner = None
+    while winner == None:
+        used_positions = []
+        num_used = []
+        not_num_used = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        player_turn = 1
+        total_moves = 0
+
         while True:
             mesmo = input("Você quer jogar mesmo? \n [S|N] \n ")
             if mesmo == "n" or mesmo == "N":
-                jogando = False
+                winner = "End"
                 break
             if mesmo == "s" or mesmo == "S":
-                jogando = True
+                winner = None
                 break
             else:
                 print("Sim ou Não")
         if mesmo == "n" or mesmo == "N":
             break
-        def win():
-            nonlocal resultado
-            if "1O" in usedPositions and "2O" in usedPositions and "3O" in usedPositions:
-                resultado = 1
-            elif "4O" in usedPositions and "5O" in usedPositions and "6O" in usedPositions:
-                resultado = 1
-            elif "7O" in usedPositions and "8O" in usedPositions and "9O" in usedPositions:
-                resultado = 1
-            elif "1O" in usedPositions and "4O" in usedPositions and "7O" in usedPositions:
-                resultado = 1
-            elif "2O" in usedPositions and "5O" in usedPositions and "8O" in usedPositions:
-                resultado = 1
-            elif "3O" in usedPositions and "6O" in usedPositions and "9O" in usedPositions:
-                resultado = 1
-            elif "1O" in usedPositions and "5O" in usedPositions and "9O" in usedPositions:
-                resultado = 1
-            elif "3O" in usedPositions and "5O" in usedPositions and "7O" in usedPositions:
-                resultado = 1
-            elif "1X" in usedPositions and "2X" in usedPositions and "3X" in usedPositions:
-                resultado = 2
-            elif "4X" in usedPositions and "5X" in usedPositions and "6X" in usedPositions:
-                resultado = 2
-            elif "7X" in usedPositions and "8X" in usedPositions and "9X" in usedPositions:
-                resultado = 2
-            elif "1X" in usedPositions and "4X" in usedPositions and "7X" in usedPositions:
-                resultado = 2
-            elif "2X" in usedPositions and "5X" in usedPositions and "8X" in usedPositions:
-                resultado = 2
-            elif "3X" in usedPositions and "6X" in usedPositions and "9X" in usedPositions:
-                resultado = 2
-            elif "1X" in usedPositions and "5X" in usedPositions and "9X" in usedPositions:
-                resultado = 2
-            elif "3X" in usedPositions and "5X" in usedPositions and "7X" in usedPositions:
-                resultado = 2
-            elif totalMoves >= 9 and resultado == 4:
-                resultado = 3
-            
+
+        def win(player, enemy, used_positions):
+            winning_sequences = [[1, 2, 3], [4, 5, 6], [7, 8, 9], 
+                                [1, 4, 7], [2, 5, 8], [3, 6, 9],  
+                                [1, 5, 9], [3, 5, 7]]            
+
+            for sequence in winning_sequences:
+                if all(str(position) + player in used_positions for position in sequence):
+                    print(f"Player \"{player}\" wins!")
+                    return 1 
+                elif all(str(position) + enemy in used_positions for position in sequence):
+                    print(f"Enemy \"{enemy}\" wins!")
+                    return 2
+                elif total_moves >= 9:
+                    return 3  
+            return None
         
         info = [["|1","|2|","3|"],
                 ["|4","|5|","6|"],
                 ["|7","|8|","9|"]]
 
-        gridTop = {1 : "|_",
-                    2 : "|_|",
-                    3 : "_|"
-                    }
-
-        gridMid = {4 : "|_",
-                    5 : "|_|",
-                    6 : "_|"
-                    }
-
-        gridBot = {7 : "|_",
-                    8 : "|_|",
-                    9 : "_|"
-                    }
+        grid = {1 : "|_",
+                2 : "|_|",
+                3 : "_|",
+                4 : "|_",
+                5 : "|_|",
+                6 : "_|",
+                7 : "|_",
+                8 : "|_|",
+                9 : "_|"}
+        
         for line in info:
             print(*line, sep="")
 
-
-
-        print("(O)Jogador |(X)CPU ")
-
-        posiçãoO = 0
-        posiçãoX = 0
-        jogador = 1
-        while resultado == 4:
-
-            while jogador == 1:
-                win()
-                if jogador == 1:
-                    posiçãoO = int(input("(O)Escolha um número de 1 à 9 que está disponivel: "))
-                if posiçãoO == 1:
-                    if "1O" in usedPositions or "1X" in usedPositions:
-                        print("Escolha inválida!!!")
-                        jogador = 1
-                    else:
-                        gridTop.update({1 : "|O"})
-                        usedPositions.append(str(posiçãoO) + "O")
-                        totalMoves += 1
-                        jogador = 2
-                elif posiçãoO == 2:
-                    if "2O" in usedPositions or "2X" in usedPositions:
-                        print("Escolha inválida!!!")
-                        jogador = 1
-                    else:
-                        gridTop.update({2 : "|O|"})
-                        usedPositions.append(str(posiçãoO) + "O")
-                        totalMoves += 1
-                        
-                        jogador = 2
-                elif posiçãoO == 3:
-                    if "3O" in usedPositions or "3X" in usedPositions:
-                        print("Escolha inválida!!!")
-                        jogador = 1
-                    else:
-                        gridTop.update({3 : "O|"})
-                        usedPositions.append(str(posiçãoO) + "O")
-                        totalMoves += 1
-                        
-                        jogador = 2
-                elif posiçãoO == 4:
-                    if "4O" in usedPositions or "4X" in usedPositions:
-                        print("Escolha inválida!!!")
-                        jogador = 1
-                    else:
-                        gridMid.update({4 : "|O"})
-                        usedPositions.append(str(posiçãoO) + "O")
-                        totalMoves += 1
-                        
-                        jogador = 2
-                elif posiçãoO == 5:
-                    if "5O" in usedPositions or "5X" in usedPositions:
-                        print("Escolha inválida!!!")
-                        jogador = 1
-                    else:
-                        gridMid.update({5 : "|O|"})
-                        usedPositions.append(str(posiçãoO) + "O")
-                        totalMoves += 1
-                        
-                        jogador = 2
-                elif posiçãoO == 6:
-                    if "6O" in usedPositions or "6X" in usedPositions:
-                        print("Escolha inválida!!!")
-                        jogador = 1
-                    else:
-                        gridMid.update({6 : "O|"})
-                        usedPositions.append(str(posiçãoO) + "O")
-                        totalMoves += 1
-                        
-                        jogador = 2
-                elif posiçãoO == 7:
-                    if "7O" in usedPositions or "7X" in usedPositions:
-                        print("Escolha inválida!!!")
-                        jogador = 1
-                    else:
-                        gridBot.update({7 : "|O"})
-                        usedPositions.append(str(posiçãoO) + "O")
-                        totalMoves += 1
-                        
-                        jogador = 2
-                elif posiçãoO == 8:
-                    if "8O" in usedPositions or "8X" in usedPositions:
-                        print("Escolha inválida!!!")
-                        jogador = 1
-                    else:
-                        gridBot.update({8 : "|O|"})
-                        usedPositions.append(str(posiçãoO) + "O")
-                        totalMoves += 1
-                        
-                        jogador = 2
-                elif posiçãoO == 9:
-                    if "9O" in usedPositions or "9X" in usedPositions:
-                        print("Escolha inválida!!!")
-                        jogador = 1
-                    else:
-                        gridBot.update({9 : "O|"})
-                        usedPositions.append(str(posiçãoO) + "O")
-                        totalMoves += 1
-                        jogador = 2
-                win()
-                if resultado != 4:
-                    break        
-            #****************************************************************************
-            while jogador == 2:
-                win()
-                if jogador == 2:
-                    posiçãoX = random.randint(1, 9)
-                if posiçãoX == 1:
-                    if "1X" in usedPositions or "1O" in usedPositions:
-                        
-                        jogador = 2
-                    else:
-                        gridTop.update({1 : "|X"})
-                        usedPositions.append(str(posiçãoX) + "X")
-                        totalMoves += 1
-                        
-                        jogador = 1
-                elif posiçãoX == 2:
-                    if "2X" in usedPositions or "2O" in usedPositions:
-                        
-                        jogador = 2
-                    else:
-                        gridTop.update({2 : "|X|"})
-                        usedPositions.append(str(posiçãoX) + "X")
-                        totalMoves += 1
-                        
-                        jogador = 1
-                elif posiçãoX == 3:
-                    if "3X" in usedPositions or "3O" in usedPositions:
-                        
-                        jogador = 2
-                    else:
-                        gridTop.update({3 : "X|"})
-                        usedPositions.append(str(posiçãoX) + "X")
-                        totalMoves += 1
-                        
-                        jogador = 1
-                elif posiçãoX == 4:
-                    if "4X" in usedPositions or "4O" in usedPositions:
-                        
-                        jogador = 2
-                    else:
-                        gridMid.update({4 : "|X"})
-                        usedPositions.append(str(posiçãoX) + "X")
-                        totalMoves += 1
-                        
-                        jogador = 1
-                elif posiçãoX == 5:
-                    if "5X" in usedPositions or "5O" in usedPositions:
-                        
-                        jogador = 2
-                    else:
-                        gridMid.update({5 : "|X|"})
-                        usedPositions.append(str(posiçãoX) + "X")
-                        totalMoves += 1
-
-                        jogador = 1
-                elif posiçãoX == 6:
-                    if "6X" in usedPositions or "6O" in usedPositions:
-                        
-                        jogador = 2
-                    else:
-                        gridMid.update({6 : "X|"})
-                        usedPositions.append(str(posiçãoX) + "X")
-                        totalMoves += 1
-
-                        jogador = 1
-                elif posiçãoX == 7:
-                    if "7X" in usedPositions or "7O" in usedPositions:
-                        
-                        jogador = 2
-                    else:
-                        gridBot.update({7 : "|X"})
-                        usedPositions.append(str(posiçãoX) + "X")
-                        totalMoves += 1
-
-                        jogador = 1
-                elif posiçãoX == 8:
-                    if "8X" in usedPositions or "8O" in usedPositions:
-                        
-                        jogador = 2
-                    else:
-                        gridBot.update({8 : "|X|"})
-                        usedPositions.append(str(posiçãoX) + "X")
-                        totalMoves += 1
-
-                        jogador = 1
-                elif posiçãoX == 9:
-                    if "9X" in usedPositions or "9O" in usedPositions:
-                        
-                        jogador = 2
-                    else:
-                        gridBot.update({9 : "X|"})
-                        usedPositions.append(str(posiçãoX) + "X")
-                        totalMoves += 1
-
-                        jogador = 1
-                win()
-                if resultado != 4:
-                    break    
-            print(*gridTop.values(), sep="")
-            print(*gridMid.values(), sep="")
-            print(*gridBot.values(), sep="")
-            print(usedPositions)
-            win()
-            if resultado == 1:
-                print("-" * 20)
-                print("Parabéns (O), você ganhou!!!")
-                print("-" * 20)
+        while True:
+            difficulty_level = input("Escolha a dificuldade: \n Facil(1)  Médio(2)   Difícil(3) \n")
+            if difficulty_level != '1' and difficulty_level != '2' and difficulty_level != '3':
+                print("Escolha invalida!!!")
+            else:
                 break
+
+        while True:
+            player = input("Escolha a sua forma: \n [X|O]\n").upper()
+            if player == "X":
+                print("Você é X")
+                enemy = "O"
+                break
+            elif player == "O":
+                print("Você é O")
+                enemy = "X"
+                break
+            else:
+                print("Escolha invalida!!!")
+                pass
+
+        while winner == None:
+            while player_turn == 1:
+                player_choice = int(input(f"({player})Escolha um número de 1 à 9 que está disponivel: "))
+
+                if player_choice in range(1,10) and player_choice not in num_used:
+                    used_positions.append(str(player_choice) + f"{player}")
+                    num_used.append(player_choice)
+                    not_num_used.remove(player_choice)
+                    if player_choice == 1 or player_choice == 4 or player_choice == 7:
+                        grid.update({player_choice : f"|{player}"})
+                    elif player_choice == 2 or player_choice == 5 or player_choice == 8:
+                        grid.update({player_choice : f"|{player}|"})
+                    elif player_choice == 3 or player_choice == 6 or player_choice == 9:
+                        grid.update({player_choice : f"{player}|"})
+
+                    print(*[grid[i] for i in range(1, 4)], sep="")
+                    print(*[grid[i] for i in range(4, 7)], sep="")
+                    print(*[grid[i] for i in range(7, 10)], sep="")
+
+                    print(used_positions)
+                    if win(player, enemy, used_positions) == 1:
+                        winner = player
+                        print(f"Player \"{player}\" wins!")
+                        break
+                    elif win(player, enemy, used_positions) == 3:
+                        winner = "tie"
+                        print(f"Everyone Loses!!!!")
+                        break
+                    else:
+                        player_turn = 2
+                        total_moves += 1
             
-            elif resultado == 2:
-                print("-" * 20)
-                print("Parabéns (X), você ganhou!!!")
-                print("-" * 20)
+                else:
+                    print("Escolha inválida!!!")
+
+    #---------------------------------------------------------------------------------------------------------------------
+            while player_turn == 2:
+                if difficulty_level == "1":
+                    if not_num_used:
+                        enemy_choice = random.choice(not_num_used)
+                    else:
+                        winner = "tie"
+                        print(f"Everyone Loses!!!!")
+                        break
+                    used_positions.append(str(enemy_choice) + f"{enemy}")
+                    num_used.append(enemy_choice)
+                    not_num_used.remove(enemy_choice)
+                    if enemy_choice == 1 or enemy_choice == 4 or enemy_choice == 7:
+                        grid.update({enemy_choice : f"|{enemy}"})
+                    elif enemy_choice == 2 or enemy_choice == 5 or enemy_choice == 8:
+                        grid.update({enemy_choice : f"|{enemy}|"})
+                    elif enemy_choice == 3 or enemy_choice == 6 or enemy_choice == 9:                        
+                        grid.update({enemy_choice : f"{enemy}|"})
+
+                    print(*[grid[i] for i in range(1, 4)], sep="")
+                    print(*[grid[i] for i in range(4, 7)], sep="")
+                    print(*[grid[i] for i in range(7, 10)], sep="")
+
+                    print(used_positions)
+                
+                    if win(player, enemy, used_positions) == 2:
+                        print(f"Enemy \"{enemy}\" wins!")
+                        winner = enemy
+                        break
+                    elif win(player, enemy, used_positions) == 3:
+                        winner = "tie"
+                        print(f"Everyone Loses!!!!")
+                        break
+                    else:
+                        player_turn = 1
+                        total_moves += 1
+
+            if winner != None:
+                break        
+        while True:            
+            replay = input("Você quer jogar novamente: \n [S|N] \n").upper()
+            if replay == "S":
+                winner = None
                 break
-            elif resultado == 3:
-                print("-" * 20)
-                print("Vocês empataram!!!")
-                print("-" * 20)
+            elif replay == "N":
+                winner = "End"
                 break
-
-        gridTop.update({1 : "|_",
-                    2 : "|_|",
-                    3 : "_|"
-                    })
-
-        gridMid.update({4 : "|_",
-                    5 : "|_|",
-                    6 : "_|"
-                    })
-
-        gridBot.update({7 : "|_",
-                    8 : "|_|",
-                    9 : "_|"
-                    })
-        usedPositions.clear()
-
-        escolha = (input("Você quer jogar de novo? \n [S|N] \n"))
-        print("-" * 20)
-        if escolha == "n" or escolha == "N":
-            jogando = False
-            break
-        else:
-            jogando = True       
-
+            else:
+                print("Escolha invalida!!!")
 if __name__ == "__main__":
     jogar()
