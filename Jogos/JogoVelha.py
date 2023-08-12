@@ -15,12 +15,11 @@ def jogar():
         winning_sequences = [[1, 2, 3], [4, 5, 6], [7, 8, 9], 
                             [1, 4, 7], [2, 5, 8], [3, 6, 9],  
                             [1, 5, 9], [3, 5, 7]]
-        blocking_sequences = [
-            [1,2,3], [1,3,2], [2,3,1], [4,5,6], [4,6,5], [5,6,4], [7,8,9], [7,9,8], [8,9,7],
-            [1,4,7], [1,7,4], [4,7,1], [2,5,8], [2,8,5], [5,8,2], [3,6,9], [3,7,5], [6,9,3],
-            [1,5,9], [1,9,5], [5,9,1], [3,5,7], [3,7,5], [5,7,3]
-        ]
-
+        
+        blocking_sequences = [[1,2,3], [1,3,2], [2,3,1], [4,5,6], [4,6,5], [5,6,4], [7,8,9], [7,9,8], [8,9,7],
+                                [1,4,7], [1,7,4], [4,7,1], [2,5,8], [2,8,5], [5,8,2], [3,6,9], [3,7,5], [6,9,3],
+                                [1,5,9], [1,9,5], [5,9,1], [3,5,7], [3,7,5], [5,7,3]]
+            
         while True:
             mesmo = input("Você quer jogar mesmo? \n [S|N] \n ")
             if mesmo == "n" or mesmo == "N":
@@ -161,6 +160,24 @@ def jogar():
                         for sequence in blocking_sequences:
                             for spot in sequence[0:2]:
                                 if all(str(spot) + player in used_positions for spot in sequence[0:2]) and str(sequence[2]) + enemy not in used_positions:
+                                    enemy_choice = int(sequence[2])
+                                    break
+                        if enemy_choice is None:
+                            enemy_choice = random.choice(not_num_used)                           
+                    else:
+                        winner = "tie"
+                        print("Everyone Loses!!!!")
+                        break
+
+                elif difficulty_level == "3":
+                    if not_num_used:
+                        enemy_choice = None
+                        for sequence in blocking_sequences:
+                            for spot in sequence[0:2]:
+                                if all(str(spot) + enemy in used_positions for spot in sequence[0:2]) and str(sequence[2]) + player not in used_positions:
+                                    enemy_choice = int(sequence[2])
+                                    break
+                                elif all(str(spot) + player in used_positions for spot in sequence[0:2]) and str(sequence[2]) + enemy not in used_positions:
                                     enemy_choice = int(sequence[2])
                                     break
                         if enemy_choice is None:
