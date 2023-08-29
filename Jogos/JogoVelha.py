@@ -33,7 +33,7 @@ def jogar():
         if mesmo == "n" or mesmo == "N":
             break
 
-        def win(player, enemy, used_positions):          
+        def win(player, enemy, used_positions):   
             for sequence in winning_sequences:
                 if all(str(position) + player in used_positions for position in sequence):
                     return 1 
@@ -83,40 +83,41 @@ def jogar():
 
         while winner == None:
             while player_turn == 1:
-                player_choice = int(input(f"({player})Escolha um número de 1 à 9 que está disponivel: "))
+                try:
+                    player_choice = int(input(f"({player})Escolha um número de 1 à 9 que está disponivel: "))
 
-                if player_choice in range(1,10) and player_choice not in num_used:
-                    used_positions.append(str(player_choice) + f"{player}")
-                    num_used.append(player_choice)
-                    not_num_used.remove(player_choice)
-                    if player_choice == 1 or player_choice == 4 or player_choice == 7:
-                        grid.update({player_choice : f"|{player}"})
-                    elif player_choice == 2 or player_choice == 5 or player_choice == 8:
-                        grid.update({player_choice : f"|{player}|"})
-                    elif player_choice == 3 or player_choice == 6 or player_choice == 9:
-                        grid.update({player_choice : f"{player}|"})
+                    if player_choice in range(1,10) and player_choice not in num_used:
+                        used_positions.append(str(player_choice) + f"{player}")
+                        num_used.append(player_choice)
+                        not_num_used.remove(player_choice)
+                        if player_choice == 1 or player_choice == 4 or player_choice == 7:
+                            grid.update({player_choice : f"|{player}"})
+                        elif player_choice == 2 or player_choice == 5 or player_choice == 8:
+                            grid.update({player_choice : f"|{player}|"})
+                        elif player_choice == 3 or player_choice == 6 or player_choice == 9:
+                            grid.update({player_choice : f"{player}|"})
 
-                    print(*[grid[i] for i in range(1, 4)], sep="")
-                    print(*[grid[i] for i in range(4, 7)], sep="")
-                    print(*[grid[i] for i in range(7, 10)], sep="")
+                        print(*[grid[i] for i in range(1, 4)], sep="")
+                        print(*[grid[i] for i in range(4, 7)], sep="")
+                        print(*[grid[i] for i in range(7, 10)], sep="")
 
-                    print(used_positions)
+                        print(used_positions)
 
-                    if win(player, enemy, used_positions) == 1:
-                        winner = player
-                        print(f"Player \"{player}\" wins!")
-                        break
-                    elif win(player, enemy, used_positions) == 3:
-                        winner = "tie"
-                        print(f"Everyone Loses!!!!")
-                        break
+                        if win(player, enemy, used_positions) == 1:
+                            winner = player
+                            print(f"Player \"{player}\" wins!")
+                            break
+                        elif win(player, enemy, used_positions) == 3:
+                            winner = "tie"
+                            print(f"Everyone Loses!!!!")
+                            break
+                        else:
+                            player_turn = 2
+                            total_moves += 1
                     else:
-                        player_turn = 2
-                        total_moves += 1
-            
-                else:
-                    print("Escolha inválida!!!")
-
+                        print("Escolha inválida: Escolha uma posição que ainda não foi usada.")
+                except ValueError:
+                    print("Escolha Inválida: Valor não numérico.")
     #---------------------------------------------------------------------------------------------------------------------
             while player_turn == 2:
                 if difficulty_level == "1":
