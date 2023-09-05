@@ -43,6 +43,23 @@ def jogar():
                     return 3  
             return None              
           
+        def update():
+            used_positions.append(str(enemy_choice) + f"{enemy}")
+            num_used.append(enemy_choice)
+            not_num_used.remove(enemy_choice)
+            if enemy_choice == 1 or enemy_choice == 4 or enemy_choice == 7:
+                grid.update({enemy_choice : f"|{enemy}"})
+            elif enemy_choice == 2 or enemy_choice == 5 or enemy_choice == 8:
+                grid.update({enemy_choice : f"|{enemy}|"})
+            elif enemy_choice == 3 or enemy_choice == 6 or enemy_choice == 9:                        
+                grid.update({enemy_choice : f"{enemy}|"})
+
+            print(*[grid[i] for i in range(1, 4)], sep="")
+            print(*[grid[i] for i in range(4, 7)], sep="")
+            print(*[grid[i] for i in range(7, 10)], sep="")
+
+            print(used_positions)       
+
         info = [["|1","|2|","3|"],
                 ["|4","|5|","6|"],
                 ["|7","|8|","9|"]]
@@ -62,7 +79,7 @@ def jogar():
 
         while True:
             difficulty_level = input("Escolha a dificuldade: \n Facil(1)  Médio(2)   Difícil(3) \n")
-            if difficulty_level != '1' and difficulty_level != '2' and difficulty_level != '3':
+            if difficulty_level not in ['1', '2', '3']:
                 print("Escolha invalida!!!")
             else:
                 break
@@ -127,21 +144,7 @@ def jogar():
                         winner = "tie"
                         print(f"Everyone Loses!!!!")
                         break
-                    used_positions.append(str(enemy_choice) + f"{enemy}")
-                    num_used.append(enemy_choice)
-                    not_num_used.remove(enemy_choice)
-                    if enemy_choice == 1 or enemy_choice == 4 or enemy_choice == 7:
-                        grid.update({enemy_choice : f"|{enemy}"})
-                    elif enemy_choice == 2 or enemy_choice == 5 or enemy_choice == 8:
-                        grid.update({enemy_choice : f"|{enemy}|"})
-                    elif enemy_choice == 3 or enemy_choice == 6 or enemy_choice == 9:                        
-                        grid.update({enemy_choice : f"{enemy}|"})
-
-                    print(*[grid[i] for i in range(1, 4)], sep="")
-                    print(*[grid[i] for i in range(4, 7)], sep="")
-                    print(*[grid[i] for i in range(7, 10)], sep="")
-
-                    print(used_positions)
+                    update()
                 
                     if win(player, enemy, used_positions) == 2:
                         print(f"Enemy \"{enemy}\" wins!")
@@ -162,13 +165,27 @@ def jogar():
                             for spot in sequence[0:2]:
                                 if all(str(spot) + player in used_positions for spot in sequence[0:2]) and str(sequence[2]) + enemy not in used_positions:
                                     enemy_choice = int(sequence[2])
-                                    break
+                                    break    
                         if enemy_choice is None:
                             enemy_choice = random.choice(not_num_used)                           
                     else:
                         winner = "tie"
                         print("Everyone Loses!!!!")
                         break
+
+                    update()
+
+                    if win(player, enemy, used_positions) == 2:
+                        print(f"Enemy \"{enemy}\" wins!")
+                        winner = enemy
+                        break
+                    elif win(player, enemy, used_positions) == 3:
+                        winner = "tie"
+                        print(f"Everyone Loses!!!!")
+                        break
+                    else:
+                        player_turn = 1
+                        total_moves += 1
 
                 elif difficulty_level == "3":
                     if not_num_used:
@@ -188,21 +205,7 @@ def jogar():
                         print("Everyone Loses!!!!")
                         break
 
-                    used_positions.append(str(enemy_choice) + f"{enemy}")
-                    num_used.append(enemy_choice)
-                    not_num_used.remove(enemy_choice)
-                    if enemy_choice == 1 or enemy_choice == 4 or enemy_choice == 7:
-                        grid.update({enemy_choice : f"|{enemy}"})
-                    elif enemy_choice == 2 or enemy_choice == 5 or enemy_choice == 8:
-                        grid.update({enemy_choice : f"|{enemy}|"})
-                    elif enemy_choice == 3 or enemy_choice == 6 or enemy_choice == 9:                        
-                        grid.update({enemy_choice : f"{enemy}|"})
-
-                    print(*[grid[i] for i in range(1, 4)], sep="")
-                    print(*[grid[i] for i in range(4, 7)], sep="")
-                    print(*[grid[i] for i in range(7, 10)], sep="")
-
-                    print(used_positions)
+                    update()
 
                     if win(player, enemy, used_positions) == 2:
                         print(f"Enemy \"{enemy}\" wins!")
