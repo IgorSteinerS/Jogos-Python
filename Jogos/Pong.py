@@ -19,11 +19,11 @@ enemy_score = 0
 
 player_surf = pygame.Surface((10,75))
 player_surf.fill("White")
-player_rect = player_surf.get_rect(center=(50, 300))
+player_rect = player_surf.get_rect(center=(5, 300))
 
 enemy_surf = pygame.Surface((10,75))
 enemy_surf.fill("White")
-enemy_rect = enemy_surf.get_rect(center=(750, 300))
+enemy_rect = enemy_surf.get_rect(center=(795, 300))
 
 ball_surf = pygame.Surface((12,12))
 ball_surf.fill("White")
@@ -91,8 +91,6 @@ while True:
         ball_rect.center = (400,300)
         ball_speed_x *= -1
         player_score +=1
-    if ball_rect.bottom.colliderect(player_rect.top):
-        ball_speed_x *= -1
     elif ball_rect.colliderect(player_rect):
         ball_speed_x *= -1
     elif ball_rect.colliderect(enemy_rect):
