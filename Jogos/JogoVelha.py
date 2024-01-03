@@ -21,16 +21,16 @@ def jogar():
                                 [1,5,9], [1,9,5], [5,9,1], [3,5,7], [3,7,5], [5,7,3]]
             
         while True:
-            mesmo = input("Você quer jogar mesmo? \n [S|N] \n ")
-            if mesmo == "n" or mesmo == "N":
+            play_game = input("Você quer jogar mesmo? \n [S|N] \n ")
+            if play_game == "n" or play_game == "N":
                 winner = "End"
                 break
-            if mesmo == "s" or mesmo == "S":
+            if play_game == "s" or play_game == "S":
                 winner = None
                 break
             else:
                 print("Sim ou Não")
-        if mesmo == "n" or mesmo == "N":
+        if play_game == "n" or play_game == "N":
             break
 
         def win(player, enemy, used_positions):   
@@ -48,23 +48,23 @@ def jogar():
             num_used.append(enemy_choice)
             not_num_used.remove(enemy_choice)
             if enemy_choice == 1 or enemy_choice == 4 or enemy_choice == 7:
-                grid.update({enemy_choice : f"|{enemy}"})
+                current_game_grid.update({enemy_choice : f"|{enemy}"})
             elif enemy_choice == 2 or enemy_choice == 5 or enemy_choice == 8:
-                grid.update({enemy_choice : f"|{enemy}|"})
+                current_game_grid.update({enemy_choice : f"|{enemy}|"})
             elif enemy_choice == 3 or enemy_choice == 6 or enemy_choice == 9:                        
-                grid.update({enemy_choice : f"{enemy}|"})
+                current_game_grid.update({enemy_choice : f"{enemy}|"})
 
-            print(*[grid[i] for i in range(1, 4)], sep="")
-            print(*[grid[i] for i in range(4, 7)], sep="")
-            print(*[grid[i] for i in range(7, 10)], sep="")
+            print(*[current_game_grid[i] for i in range(1, 4)], sep="")
+            print(*[current_game_grid[i] for i in range(4, 7)], sep="")
+            print(*[current_game_grid[i] for i in range(7, 10)], sep="")
 
             print(used_positions)       
 
-        info = [["|1","|2|","3|"],
+        initial_grid_info = [["|1","|2|","3|"],
                 ["|4","|5|","6|"],
                 ["|7","|8|","9|"]]
 
-        grid = {1 : "|_",
+        current_game_grid = {1 : "|_",
                 2 : "|_|",
                 3 : "_|",
                 4 : "|_",
@@ -74,7 +74,7 @@ def jogar():
                 8 : "|_|",
                 9 : "_|"}
         
-        for line in info:
+        for line in initial_grid_info:
             print(*line, sep="")
 
         while True:
@@ -108,15 +108,15 @@ def jogar():
                         num_used.append(player_choice)
                         not_num_used.remove(player_choice)
                         if player_choice == 1 or player_choice == 4 or player_choice == 7:
-                            grid.update({player_choice : f"|{player}"})
+                            current_game_grid.update({player_choice : f"|{player}"})
                         elif player_choice == 2 or player_choice == 5 or player_choice == 8:
-                            grid.update({player_choice : f"|{player}|"})
+                            current_game_grid.update({player_choice : f"|{player}|"})
                         elif player_choice == 3 or player_choice == 6 or player_choice == 9:
-                            grid.update({player_choice : f"{player}|"})
+                            current_game_grid.update({player_choice : f"{player}|"})
 
-                        print(*[grid[i] for i in range(1, 4)], sep="")
-                        print(*[grid[i] for i in range(4, 7)], sep="")
-                        print(*[grid[i] for i in range(7, 10)], sep="")
+                        print(*[current_game_grid[i] for i in range(1, 4)], sep="")
+                        print(*[current_game_grid[i] for i in range(4, 7)], sep="")
+                        print(*[current_game_grid[i] for i in range(7, 10)], sep="")
 
                         print(used_positions)
 

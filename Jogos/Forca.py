@@ -88,6 +88,7 @@ def jogar():
     "humildade", "inocencia", "inspirar", "inventar", "jardim", "joia", "lado",
     "lealdade", "leveza", "liberdade", "livre", "lua", "luzir", "maravilha"
 ]
+
         palavra = random.randrange(0, len(palavras))
         palavraSecreta = palavras[palavra]
         palavraSecretaLis = list(palavraSecreta)

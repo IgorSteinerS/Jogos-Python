@@ -19,6 +19,7 @@ class Jogos:
             print("******************************")
             for id, instance in Jogos.todos_jogos.items():
                 print(f"{instance}")
+            print("-" * 25)
             print("Digite \"Q\" para sair.")
             jogo = input("Qual jogo? \n")
             
@@ -45,4 +46,5 @@ jogo2 = Jogos(2, "Forca")
 jogo1.escolherJogo()
 
 if __name__ == '__main__':
-    Jogos.escolherJogoescolherJogo()
+    Jogos.escolherJogo()
+    
