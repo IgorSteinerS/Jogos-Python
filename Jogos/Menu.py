@@ -1,5 +1,8 @@
 import Forca
 import JogoVelha
+import JogoVelhaMinimax
+import Pong
+import Snake 
 
 class Jogos:
     todos_jogos = {}
@@ -33,7 +36,13 @@ class Jogos:
                     if run == 1:
                         JogoVelha.jogar()
                     elif run == 2:
-                        Forca.jogar()        
+                        Forca.jogar()  
+                    elif run == 3:
+                        JogoVelhaMinimax.jogar()   
+                    elif run == 4:
+                        Pong.jogar()   
+                    elif run == 5:
+                        Snake.jogar()   
             except ValueError:
                 print("Escolha invalida: Valor não numérico")
 
@@ -41,6 +50,9 @@ class Jogos:
 
 jogo1 = Jogos(1, "Jogo da Velha")
 jogo2 = Jogos(2, "Forca")
+jogo3 = Jogos(3, "Jogo da Velha Minimax")
+jogo4 = Jogos(4, "Pong")
+jogo5 = Jogos(5, "Snake")
 
 
 jogo1.escolherJogo()
