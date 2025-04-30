@@ -1,3 +1,3 @@
 
-##Para iniciar o projeto rode o arquivo Menu.py
+#Para iniciar o projeto rode o arquivo menu.py
 
