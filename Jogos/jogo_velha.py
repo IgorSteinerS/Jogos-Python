@@ -29,7 +29,6 @@ BLOCKING_SEQUENCES = (
 )
 
 
-
 def exibir_tabuleiro(tabuleiro):
     """Exibe o tabuleiro formatado."""
     for i in range(0, 9, 3):

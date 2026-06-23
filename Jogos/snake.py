@@ -1,7 +1,8 @@
 def jogar():
-    import pygame
     import random
     from sys import exit
+
+    import pygame
 
     # Initialize Pygame
     pygame.init()
@@ -21,11 +22,11 @@ def jogar():
     snake_length = 1
 
     # Initialize game surfaces
-    snake_surface = pygame.Surface((20,20))
-    snake_surface.fill('White')
+    snake_surface = pygame.Surface((20, 20))
+    snake_surface.fill("White")
     snake_rect = snake_surface.get_rect(topleft=(300, 300))
 
-    apple_surface = pygame.Surface((20,20))
+    apple_surface = pygame.Surface((20, 20))
     apple_surface.fill("Red")
     apple_rect = apple_surface.get_rect(topleft=(apple_X, apple_Y))
 
@@ -34,7 +35,7 @@ def jogar():
     score_rect = score_surf.get_rect(center=(300, 620))
 
     bg_surface = pygame.Surface((600, 600))
-    bg_surface.fill('Black')
+    bg_surface.fill("Black")
 
     bg_Score = pygame.Surface((600, 50))
     bg_Score.fill((64, 64, 64))
@@ -64,7 +65,9 @@ def jogar():
                         # Restart the game
                         # Reset game variables to their initial state
                         Right, Left, Up, Down = False, False, False, False
-                        apple_X, apple_Y = random.randrange(0, 581, 20), random.randrange(0, 581, 20)
+                        apple_X, apple_Y = random.randrange(
+                            0, 581, 20
+                        ), random.randrange(0, 581, 20)
                         snake_body = [(300, 300)]
                         snake_length = 1
                         game_active = True
@@ -98,7 +101,9 @@ def jogar():
             # Draw game elements on the screen
             screen.blit(bg_surface, (0, 0))
             screen.blit(bg_Score, (0, 600))
-            score_surf = score_font.render(f"Score: {len(snake_body) - 1}", True, "Black")
+            score_surf = score_font.render(
+                f"Score: {len(snake_body) - 1}", True, "Black"
+            )
             screen.blit(score_surf, score_rect)
 
             for body_part in snake_body:
@@ -147,7 +152,9 @@ def jogar():
             if keys[pygame.K_SPACE]:
                 # Reset game variables to their initial state
                 Right, Left, Up, Down = False, False, False, False
-                apple_X, apple_Y = random.randrange(0, 581, 20), random.randrange(0, 581, 20)
+                apple_X, apple_Y = random.randrange(0, 581, 20), random.randrange(
+                    0, 581, 20
+                )
                 snake_body = [(300, 300)]
                 snake_length = 1
                 game_active = True
@@ -158,5 +165,5 @@ def jogar():
         clock.tick(7)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     jogar()
