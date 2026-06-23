@@ -25,3 +25,10 @@ Todas as alterações relevantes deste projeto serão documentadas neste arquivo
 ### Inicial
 - Versão original do projeto recebida.
 - Jogos desenvolvidos em Python.
+
+
+hoje 
+
+adicionado linters
+removido arquivo mini max
+alterado readme
