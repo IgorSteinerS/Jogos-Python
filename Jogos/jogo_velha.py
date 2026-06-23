@@ -1,10 +1,6 @@
-"""
-Jogo da Velha
-"""
-
+from dataclasses import dataclass, field
 import random
 
-# Constantes
 INITIAL_GRID_INFO = [
     ["|1", "|2|", "3|"],
     ["|4", "|5|", "6|"],
@@ -28,173 +24,259 @@ BLOCKING_SEQUENCES = (
     + [[c, a, b] for a, b, c in WINNING_SEQUENCES]
 )
 
-
-def exibir_tabuleiro(tabuleiro):
-    """Exibe o tabuleiro formatado."""
-    for i in range(0, 9, 3):
-        print("".join(tabuleiro[i : i + 3]))
+PLAYER = "player"
+COMPUTER = "computer"
 
 
-def criar_tabuleiro():
-    """Cria o tabuleiro inicial."""
+@dataclass
+class GameConfig:
+    player_symbol: str
+    computer_symbol: str
+    difficulty: int
+    current_player: str = PLAYER
+
+@dataclass
+class GameState:
+    board: list
+    player_moves: list = field(default_factory=list)
+    computer_moves: list = field(default_factory=list)
+    used_moves: list = field(default_factory=list)
+
+def display_board(board):
+    for index in range(0, 9, 3):
+        print("".join(board[index:index + 3]))
+
+def create_board():
     return [
-        "|_" if (i % 3 == 0) else ("_|" if (i % 3 == 2) else "|_|") for i in range(9)
+        "|_" if index % 3 == 0
+        else ("_|" if index % 3 == 2 else "|_|")
+        for index in range(9)
     ]
 
+def update_board(board, position, symbol):
+    board_index = position - 1
 
-def atualizar_tabuleiro(tabuleiro, posicao, simbolo):
-    """Atualiza o tabuleiro com a jogada do jogador ou da IA."""
-    idx = posicao - 1
-    if idx % 3 == 0:
-        tabuleiro[idx] = f"|{simbolo}"
-    elif idx % 3 == 1:
-        tabuleiro[idx] = f"|{simbolo}|"
+    if board_index % 3 == 0:
+        board[board_index] = f"|{symbol}"
+    elif board_index % 3 == 1:
+        board[board_index] = f"|{symbol}|"
     else:
-        tabuleiro[idx] = f"{simbolo}|"
+        board[board_index] = f"{symbol}|"
+
+def has_winner(moves):
+    return any(
+        all(position in moves for position in sequence)
+        for sequence in WINNING_SEQUENCES
+    )
+
+def choose_move(
+    difficulty,
+    player_moves,
+    computer_moves,
+    used_moves,
+):
+
+    available_positions = [
+        position
+        for position in range(1, 10)
+        if position not in used_moves
+    ]
+
+    if difficulty == 1:
+        return random.choice(available_positions)
+
+    for sequence in BLOCKING_SEQUENCES:
+        first, second, third = sequence
+
+        if difficulty == 2:
+            if (
+                first in player_moves
+                and second in player_moves
+                and third not in used_moves
+            ):
+                return third
+
+        if difficulty == 3:
+            if (
+                first in computer_moves
+                and second in computer_moves
+                and third not in used_moves
+            ):
+                return third
+
+            if (
+                first in player_moves
+                and second in player_moves
+                and third not in used_moves
+            ):
+                return third
+
+    return random.choice(available_positions)
 
 
-def verificar_vitoria(jogadas, simbolo):  # pylint: disable=unused-argument
-    """Verifica se há uma combinação vencedora."""
-    return any(all(pos in jogadas for pos in seq) for seq in WINNING_SEQUENCES)
-
-
-def obter_jogada_ia(nivel, jogador, inimigo, jogadas_usadas):
-    """Obtém a jogada da IA com base no nível de dificuldade."""
-    opcoes_disponiveis = [i for i in range(1, 10) if i not in jogadas_usadas]
-
-    if nivel == 1:
-        return random.choice(opcoes_disponiveis)
-
-    for seq in BLOCKING_SEQUENCES:
-        a, b, c = seq
-        if nivel == 2:
-            if a in jogador and b in jogador and c not in jogadas_usadas:
-                return c
-        if nivel == 3:
-            if a in inimigo and b in inimigo and c not in jogadas_usadas:
-                return c
-            if a in jogador and b in jogador and c not in jogadas_usadas:
-                return c
-
-    return random.choice(opcoes_disponiveis)
-
-
-def escolher_simbolo():
-    """Escolhe o símbolo do jogador e da IA."""
+def choose_symbol():
     while True:
-        simbolo = input("Escolha sua forma [X|O]: ").upper()
-        if simbolo in ["X", "O"]:
-            return simbolo, "O" if simbolo == "X" else "X"
+        symbol = input("Escolha sua forma [X|O]: ").upper()
+
+        if symbol in ("X", "O"):
+            computer_symbol = "O" if symbol == "X" else "X"
+            return symbol, computer_symbol
+
         print("Escolha inválida!")
 
 
-def escolher_dificuldade():
-    """Escolhe a dificuldade do jogo."""
+def choose_difficulty():
     while True:
-        nivel = input("Escolha a dificuldade: Facil(1) Médio(2) Difícil(3): ")
-        if nivel in ["1", "2", "3"]:
-            return int(nivel)
+        difficulty = input(
+            "Escolha a dificuldade: Fácil(1) Médio(2) Difícil(3): "
+        )
+
+        if difficulty in ("1", "2", "3"):
+            return int(difficulty)
+
         print("Dificuldade inválida!")
 
 
-def obter_jogada_jogador(simbolo_jogador, jogadas_usadas):
-    """Obtém a jogada do jogador, garantindo que a entrada seja válida."""
+def get_player_move(player_symbol, used_moves):
     while True:
         try:
-            jogada = int(input(f"({simbolo_jogador}) Escolha uma posição [1-9]: "))
-            if jogada in range(1, 10) and jogada not in jogadas_usadas:
-                return jogada
-            print("Posição inválida ou já usada.")
+            move = int(
+                input(
+                    f"({player_symbol}) "
+                    "Escolha uma posição [1-9]: "
+                )
+            )
+
+            if move in range(1, 10) and move not in used_moves:
+                return move
+
+            print("Posição inválida ou já utilizada.")
+
         except ValueError:
             print("Entrada inválida.")
 
 
-# Função principal modificada
-def executar_turno(config_jogo, estado_jogo):
-    """Executa um turno do jogo com parâmetros agrupados em dicionários."""
-    if config_jogo["jogador_atual"] == "player":
-        jogada = obter_jogada_jogador(
-            config_jogo["simbolo_jogador"], estado_jogo["jogadas_usadas"]
+def ask_yes_no(message):
+    while True:
+        answer = input(message).strip().upper()
+
+        if answer in ("S", "N"):
+            return answer
+
+        print("Entrada inválida!")
+
+
+def execute_turn(game_config, game_state):
+    if game_config.current_player == PLAYER:
+
+        move = get_player_move(
+            game_config.player_symbol,
+            game_state.used_moves,
         )
-        estado_jogo["jogadas_jogador"].append(jogada)
-        atualizar_tabuleiro(
-            estado_jogo["tabuleiro"], jogada, config_jogo["simbolo_jogador"]
+
+        game_state.player_moves.append(move)
+
+        update_board(
+            game_state.board,
+            move,
+            game_config.player_symbol,
         )
+
     else:
-        jogada = obter_jogada_ia(
-            config_jogo["dificuldade"],
-            estado_jogo["jogadas_jogador"],
-            estado_jogo["jogadas_ia"],
-            estado_jogo["jogadas_usadas"],
+
+        move = choose_move(
+            game_config.difficulty,
+            game_state.player_moves,
+            game_state.computer_moves,
+            game_state.used_moves,
         )
-        estado_jogo["jogadas_ia"].append(jogada)
-        atualizar_tabuleiro(estado_jogo["tabuleiro"], jogada, config_jogo["simbolo_ia"])
-        print(f"O inimigo ({config_jogo['simbolo_ia']}) escolheu: {jogada}")
 
-    estado_jogo["jogadas_usadas"].append(jogada)
-    exibir_tabuleiro(estado_jogo["tabuleiro"])
+        game_state.computer_moves.append(move)
 
-    if config_jogo["jogador_atual"] == "player" and verificar_vitoria(
-        estado_jogo["jogadas_jogador"], config_jogo["simbolo_jogador"]
+        update_board(
+            game_state.board,
+            move,
+            game_config.computer_symbol,
+        )
+
+        print(
+            f"O inimigo "
+            f"({game_config.computer_symbol}) "
+            f"escolheu: {move}"
+        )
+
+    game_state.used_moves.append(move)
+
+    display_board(game_state.board)
+
+    if (
+        game_config.current_player == PLAYER
+        and has_winner(game_state.player_moves)
     ):
-        print(f'Você venceu como "{config_jogo["simbolo_jogador"]}"!')
+        print(
+            f'Você venceu como '
+            f'"{game_config.player_symbol}"!'
+        )
         return True
-    if config_jogo["jogador_atual"] == "ia" and verificar_vitoria(
-        estado_jogo["jogadas_ia"], config_jogo["simbolo_ia"]
+
+    if (
+        game_config.current_player == COMPUTER
+        and has_winner(game_state.computer_moves)
     ):
-        print(f'O inimigo "{config_jogo["simbolo_ia"]}" venceu!')
+        print(
+            f'O inimigo '
+            f'"{game_config.computer_symbol}" venceu!'
+        )
         return True
+
     return False
 
 
-def jogo():
-    """Função principal do jogo."""
+def start_match():
+    player_symbol, computer_symbol = choose_symbol()
+
+    game_config = GameConfig(
+        player_symbol=player_symbol,
+        computer_symbol=computer_symbol,
+        difficulty=choose_difficulty(),
+    )
+
+    game_state = GameState(
+        board=create_board()
+    )
+
+    for line in INITIAL_GRID_INFO:
+        print(*line, sep="")
+
+    for _ in range(9):
+
+        finished = execute_turn(
+            game_config,
+            game_state,
+        )
+
+        if finished:
+            return
+
+        game_config.current_player = (
+            COMPUTER
+            if game_config.current_player == PLAYER
+            else PLAYER
+        )
+
+    print("Empate!")
+
+
+def jogar():
+
     print("******** JOGO DA VELHA ********")
 
-    confirmacao = input("Você quer jogar? [S|N]: ")
-    while confirmacao not in ("S", "s", "N", "n"):
-        print("Entrada inválida!")
-        confirmacao = input("Você quer jogar? [S|N]: ")
+    while ask_yes_no(
+        "Você quer jogar? [S|N]: "
+    ) == "S":
 
-    while confirmacao.upper() == "S":
-        # Configurações do jogo
-        config_jogo = {
-            "simbolo_jogador": None,
-            "simbolo_ia": None,
-            "dificuldade": None,
-            "jogador_atual": "player",
-        }
-
-        # Estado do jogo
-        estado_jogo = {
-            "tabuleiro": criar_tabuleiro(),
-            "jogadas_jogador": [],
-            "jogadas_ia": [],
-            "jogadas_usadas": [],
-        }
-
-        # Configuração inicial
-        config_jogo["simbolo_jogador"], config_jogo["simbolo_ia"] = escolher_simbolo()
-        config_jogo["dificuldade"] = escolher_dificuldade()
-
-        for line in INITIAL_GRID_INFO:
-            print(*line, sep="")
-
-        for turno in range(9):  # pylint: disable=unused-variable
-            terminou = executar_turno(config_jogo, estado_jogo)
-            if terminou:
-                break
-            config_jogo["jogador_atual"] = (
-                "ia" if config_jogo["jogador_atual"] == "player" else "player"
-            )
-        else:
-            print("Empate!")
-
-        confirmacao = input("Você quer jogar novamente? [S|N]: ")
-        while confirmacao not in ("S", "s", "N", "n"):
-            print("Entrada inválida!")
-            confirmacao = input("Você quer jogar novamente? [S|N]: ")
+        start_match()
 
 
 if __name__ == "__main__":
-    jogo()
+    jogar()
