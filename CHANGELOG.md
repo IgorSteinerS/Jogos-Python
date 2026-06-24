@@ -2,6 +2,23 @@
 
 Todas as alterações relevantes deste projeto serão documentadas neste arquivo.
 
+---
+
+## [1.2.0] - 2026-06-23
+
+### Adicionado
+- Integração de linters para melhoria da qualidade de código.
+- Padronização adicional no README do projeto.
+
+### Removido
+- Algoritmo Minimax do Jogo da Velha.
+
+### Refatorado
+- Refatoração do Jogo da Velha com foco em legibilidade e separação de responsabilidades.
+- Refatoração do Menu principal para reduzir acoplamento e melhorar extensibilidade.
+
+---
+
 ## [1.1.0] - 2026-06-22
 
 ### Refatorado
@@ -25,10 +42,3 @@ Todas as alterações relevantes deste projeto serão documentadas neste arquivo
 ### Inicial
 - Versão original do projeto recebida.
 - Jogos desenvolvidos em Python.
-
-
-hoje 
-
-adicionado linters
-removido arquivo mini max
-alterado readme
