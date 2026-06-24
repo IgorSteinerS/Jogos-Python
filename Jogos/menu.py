@@ -1,3 +1,4 @@
+# Refatorado
 import forca
 import jogo_velha
 import pong
@@ -19,7 +20,7 @@ class Game:
         return f"({self.game_id}) {self.name}"
 
 
-def display_menu():
+def display_menu() -> None:
 
     print("******************************")
     print("******* ESCOLHA O JOGO *******")
@@ -32,19 +33,17 @@ def display_menu():
     print('Digite "Q" para sair.')
 
 
-def execute_game(selected_option):
+def execute_game(selected_option) -> None:
 
     game = Game.registry.get(selected_option)
 
     if game:
         game.action()
     else:
-        print(
-            f"Escolha inválida: jogo ({selected_option}) não existe."
-        )
+        print(f"Escolha inválida: jogo ({selected_option}) não existe.")
 
 
-def choose_game():
+def choose_game() -> None:
 
     while True:
         display_menu()
@@ -60,33 +59,16 @@ def choose_game():
             execute_game(game_id)
 
         except ValueError:
-            print(
-                "Escolha inválida: informe um número válido."
-            )
+            print("Escolha inválida: informe um número válido.")
 
-Game(
-    1,
-    "Jogo da Velha",
-    jogo_velha.jogar
-)
 
-Game(
-    2,
-    "Forca",
-    forca.jogar
-)
+Game(1, "Jogo da Velha", jogo_velha.jogar)
 
-Game(
-    3,
-    "Pong",
-    pong.jogar
-)
+Game(2, "Forca", forca.jogar)
 
-Game(
-    4,
-    "Snake",
-    snake.jogar
-)
+Game(3, "Pong", pong.jogar)
+
+Game(4, "Snake", snake.jogar)
 
 
 if __name__ == "__main__":

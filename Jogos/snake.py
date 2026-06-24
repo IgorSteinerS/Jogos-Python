@@ -21,6 +21,7 @@ DIRECTIONS = {
     pygame.K_DOWN: (0, 1),
 }
 
+
 def init():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -31,12 +32,13 @@ def init():
 
 def reset():
     return {
-        "direction": (1, 0), 
+        "direction": (1, 0),
         "snake": [INITIAL_POS],
         "length": 1,
         "apple": spawn_apple([INITIAL_POS]),
         "active": True,
     }
+
 
 def spawn_apple(snake):
     while True:
@@ -46,6 +48,7 @@ def spawn_apple(snake):
         )
         if pos not in snake:
             return pos
+
 
 def handle_input(event, state):
     if event.key not in DIRECTIONS:

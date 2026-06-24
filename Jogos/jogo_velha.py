@@ -35,6 +35,7 @@ class GameConfig:
     difficulty: int
     current_player: str = PLAYER
 
+
 @dataclass
 class GameState:
     board: list
@@ -42,16 +43,18 @@ class GameState:
     computer_moves: list = field(default_factory=list)
     used_moves: list = field(default_factory=list)
 
+
 def display_board(board):
     for index in range(0, 9, 3):
-        print("".join(board[index:index + 3]))
+        print("".join(board[index : index + 3]))
+
 
 def create_board():
     return [
-        "|_" if index % 3 == 0
-        else ("_|" if index % 3 == 2 else "|_|")
+        "|_" if index % 3 == 0 else ("_|" if index % 3 == 2 else "|_|")
         for index in range(9)
     ]
+
 
 def update_board(board, position, symbol):
     board_index = position - 1
@@ -63,11 +66,13 @@ def update_board(board, position, symbol):
     else:
         board[board_index] = f"{symbol}|"
 
+
 def has_winner(moves):
     return any(
         all(position in moves for position in sequence)
         for sequence in WINNING_SEQUENCES
     )
+
 
 def choose_move(
     difficulty,
@@ -77,9 +82,7 @@ def choose_move(
 ):
 
     available_positions = [
-        position
-        for position in range(1, 10)
-        if position not in used_moves
+        position for position in range(1, 10) if position not in used_moves
     ]
 
     if difficulty == 1:
@@ -127,9 +130,7 @@ def choose_symbol():
 
 def choose_difficulty():
     while True:
-        difficulty = input(
-            "Escolha a dificuldade: Fácil(1) Médio(2) Difícil(3): "
-        )
+        difficulty = input("Escolha a dificuldade: Fácil(1) Médio(2) Difícil(3): ")
 
         if difficulty in ("1", "2", "3"):
             return int(difficulty)
@@ -140,12 +141,7 @@ def choose_difficulty():
 def get_player_move(player_symbol, used_moves):
     while True:
         try:
-            move = int(
-                input(
-                    f"({player_symbol}) "
-                    "Escolha uma posição [1-9]: "
-                )
-            )
+            move = int(input(f"({player_symbol}) " "Escolha uma posição [1-9]: "))
 
             if move in range(1, 10) and move not in used_moves:
                 return move
@@ -199,34 +195,18 @@ def execute_turn(game_config, game_state):
             game_config.computer_symbol,
         )
 
-        print(
-            f"O inimigo "
-            f"({game_config.computer_symbol}) "
-            f"escolheu: {move}"
-        )
+        print(f"O inimigo " f"({game_config.computer_symbol}) " f"escolheu: {move}")
 
     game_state.used_moves.append(move)
 
     display_board(game_state.board)
 
-    if (
-        game_config.current_player == PLAYER
-        and has_winner(game_state.player_moves)
-    ):
-        print(
-            f'Você venceu como '
-            f'"{game_config.player_symbol}"!'
-        )
+    if game_config.current_player == PLAYER and has_winner(game_state.player_moves):
+        print(f"Você venceu como " f'"{game_config.player_symbol}"!')
         return True
 
-    if (
-        game_config.current_player == COMPUTER
-        and has_winner(game_state.computer_moves)
-    ):
-        print(
-            f'O inimigo '
-            f'"{game_config.computer_symbol}" venceu!'
-        )
+    if game_config.current_player == COMPUTER and has_winner(game_state.computer_moves):
+        print(f"O inimigo " f'"{game_config.computer_symbol}" venceu!')
         return True
 
     return False
@@ -241,9 +221,7 @@ def start_match():
         difficulty=choose_difficulty(),
     )
 
-    game_state = GameState(
-        board=create_board()
-    )
+    game_state = GameState(board=create_board())
 
     for line in INITIAL_GRID_INFO:
         print(*line, sep="")
@@ -259,9 +237,7 @@ def start_match():
             return
 
         game_config.current_player = (
-            COMPUTER
-            if game_config.current_player == PLAYER
-            else PLAYER
+            COMPUTER if game_config.current_player == PLAYER else PLAYER
         )
 
     print("Empate!")
@@ -271,9 +247,7 @@ def jogar():
 
     print("******** JOGO DA VELHA ********")
 
-    while ask_yes_no(
-        "Você quer jogar? [S|N]: "
-    ) == "S":
+    while ask_yes_no("Você quer jogar? [S|N]: ") == "S":
 
         start_match()
 

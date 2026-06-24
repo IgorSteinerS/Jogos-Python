@@ -294,6 +294,63 @@ Com as refatorações aplicadas, o projeto passa a apresentar:
 * Facilidade de manutenção e evolução futura.
 
 
+## Instalação e Execução
+
+### Pré-requisitos
+
+* Python 3.12 ou superior
+* [uv](https://docs.astral.sh/uv/) instalado
+
+### Passo a passo
+
+**1. Clonar o repositório**
+
+```bash
+git clone https://github.com/IgorSteinerS/Jogos-Python.git
+cd Jogos-Python
+```
+
+**2. Instalar as dependências**
+
+```bash
+uv sync
+```
+
+**3. Ativar o ambiente virtual**
+
+```bash
+source .venv/bin/activate
+```
+
+**4. Executar a aplicação**
+
+```bash
+python Jogos/menu.py
+```
+
+---
+
+## Testes de Cobertura
+
+O projeto conta com uma suíte de testes unitários localizada em `Jogos/Testes/test_jogos.py`, cobrindo os principais módulos da aplicação com **88 casos de teste** no total.
+
+### Módulos Testados
+
+* **Forca** — constantes do jogo, revelação de letras, fluxo de vitória e derrota.
+* **Jogo da Velha** — criação e atualização do tabuleiro, detecção de vencedor, lógica de escolha de jogada por dificuldade e execução de turnos.
+* **Pong** — inicialização de estado, controle de velocidade por teclado, movimentação de objetos, limitação dos paddles e colisões da bola.
+* **Snake** — spawn e alinhamento da maçã, controle de direção, movimentação e crescimento da cobra, detecção de colisões com parede, consigo mesma e com a maçã.
+* **Menu** — registro de jogos, despacho de ações, exibição do menu e tratamento de entradas inválidas.
+
+
+### Como Executar os Testes
+
+```bash
+python Jogos/Testes/test_jogos.py
+```
+
+---
+
 ## Padronização e Estilização de Código
 
 Como parte do processo de refatoração, foi aplicada uma ferramenta de análise estática para garantir conformidade com as boas práticas recomendadas pela comunidade Python.
