@@ -16,6 +16,9 @@ Todas as alterações relevantes deste projeto serão documentadas neste arquivo
 ### Refatorado
 - Refatoração do Jogo da Velha com foco em legibilidade e separação de responsabilidades.
 - Refatoração do Menu principal para reduzir acoplamento e melhorar extensibilidade.
+- Refatoração de Pong para reduzir IFs e centralizar lógica de controles.
+- Reestruturação da lógica de movimento utilizando vetores no Snake.
+- Simplificação do controle de direção no Pong por meio de mapeamento de ações.
 
 ---
 

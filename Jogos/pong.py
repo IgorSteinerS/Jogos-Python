@@ -1,111 +1,162 @@
-def jogar():
-    from sys import exit
+from sys import exit
+import pygame
 
-    import pygame
+WIDTH, HEIGHT = 800, 600
+FPS = 30
 
+PADDLE_SPEED = 8
+BALL_SPEED_X = 9
+BALL_SPEED_Y = 9
+
+WHITE = "White"
+BLACK = "Black"
+
+CENTER = (WIDTH // 2, HEIGHT // 2)
+
+
+def init():
     pygame.init()
-
-    screen = pygame.display.set_mode((800, 600))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Pong")
     clock = pygame.time.Clock()
+    return screen, clock
 
-    ball_speed_x = 9
-    ball_speed_y = 9
 
-    player_speed = 0
-    enemy_speed = 0
+def create_assets():
+    paddle = pygame.Surface((10, 75))
+    paddle.fill(WHITE)
 
-    player_score = 0
-    enemy_score = 0
+    ball = pygame.Surface((12, 12))
+    ball.fill(WHITE)
 
-    player_surf = pygame.Surface((10, 75))
-    player_surf.fill("White")
-    player_rect = player_surf.get_rect(center=(5, 300))
+    bg = pygame.Surface((WIDTH, HEIGHT))
+    bg.fill(BLACK)
 
-    enemy_surf = pygame.Surface((10, 75))
-    enemy_surf.fill("White")
-    enemy_rect = enemy_surf.get_rect(center=(795, 300))
+    return paddle, ball, bg
 
-    ball_surf = pygame.Surface((12, 12))
-    ball_surf.fill("White")
-    ball_rect = ball_surf.get_rect(center=(400, 300))
 
-    score_font = pygame.font.Font(None, 80)
-    player_score_surf = score_font.render(f"{player_score}", True, "White")
-    enemy_score_surf = score_font.render(f"{enemy_score}", True, "White")
-    player_score_rect = player_score_surf.get_rect(center=(200, 100))
-    enemy_score_rect = enemy_score_surf.get_rect(center=(600, 100))
+def create_fonts():
+    return pygame.font.Font(None, 80)
 
-    bg_surf = pygame.Surface((800, 600))
-    bg_surf.fill("Black")
+
+def reset_state():
+    return {
+        "player": pygame.Rect(5, 300, 10, 75),
+        "enemy": pygame.Rect(WIDTH - 15, 300, 10, 75),
+        "ball": pygame.Rect(WIDTH // 2, HEIGHT // 2, 12, 12),
+        "ball_dir": [BALL_SPEED_X, BALL_SPEED_Y],
+        "player_score": 0,
+        "enemy_score": 0,
+        "player_speed": 0,
+        "enemy_speed": 0,
+    }
+
+
+def handle_keydown(event, state):
+    adjust_key_speed(event.key, state, 1)
+
+
+def handle_keyup(event, state):
+    adjust_key_speed(event.key, state, -1)
+
+
+KEY_ACTIONS = {
+    pygame.K_w: ("player_speed", -1),
+    pygame.K_s: ("player_speed", 1),
+    pygame.K_UP: ("enemy_speed", -1),
+    pygame.K_DOWN: ("enemy_speed", 1),
+}
+
+
+def adjust_key_speed(key, state, factor):
+
+    action = KEY_ACTIONS.get(key)
+    if not action:
+        return
+    field, direction = action
+    state[field] += direction * PADDLE_SPEED * factor
+
+
+def move_objects(state):
+    state["ball"].x += state["ball_dir"][0]
+    state["ball"].y += state["ball_dir"][1]
+
+    state["player"].y += state["player_speed"]
+    state["enemy"].y += state["enemy_speed"]
+
+
+def clamp_paddles(state):
+    for paddle in ["player", "enemy"]:
+        rect = state[paddle]
+        rect.y = max(0, min(rect.y, HEIGHT - rect.height))
+
+
+def handle_ball_collision(state):
+    ball = state["ball"]
+
+    if ball.top <= 0 or ball.bottom >= HEIGHT:
+        state["ball_dir"][1] *= -1
+
+    if ball.left <= 0:
+        state["enemy_score"] += 1
+        reset_ball(state)
+
+    if ball.right >= WIDTH:
+        state["player_score"] += 1
+        reset_ball(state)
+
+    if ball.colliderect(state["player"]) or ball.colliderect(state["enemy"]):
+        state["ball_dir"][0] *= -1
+
+
+def reset_ball(state):
+    state["ball"].center = CENTER
+    state["ball_dir"] = [BALL_SPEED_X, BALL_SPEED_Y]
+
+
+def render(screen, state, assets, font):
+    paddle_surf, ball_surf, bg = assets
+
+    screen.blit(bg, (0, 0))
+
+    screen.blit(paddle_surf, state["player"])
+    screen.blit(paddle_surf, state["enemy"])
+    screen.blit(ball_surf, state["ball"])
+
+    p_score = font.render(str(state["player_score"]), True, WHITE)
+    e_score = font.render(str(state["enemy_score"]), True, WHITE)
+
+    screen.blit(p_score, (200, 100))
+    screen.blit(e_score, (600, 100))
+
+
+def jogar():
+    screen, clock = init()
+    assets = create_assets()
+    font = create_fonts()
+
+    state = reset_state()
 
     while True:
-        keys = pygame.key.get_pressed()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    enemy_speed -= 8
-                elif event.key == pygame.K_DOWN:
-                    enemy_speed += 8
-                elif event.key == pygame.K_w:
-                    player_speed -= 8
-                elif event.key == pygame.K_s:
-                    player_speed += 8
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP:
-                    enemy_speed += 8
-                elif event.key == pygame.K_DOWN:
-                    enemy_speed -= 8
-                elif event.key == pygame.K_w:
-                    player_speed += 8
-                elif event.key == pygame.K_s:
-                    player_speed -= 8
+                handle_keydown(event, state)
 
-        ball_rect.x += ball_speed_x
-        ball_rect.y += ball_speed_y
+            if event.type == pygame.KEYUP:
+                handle_keyup(event, state)
 
-        player_rect.y += player_speed
-        enemy_rect.y += enemy_speed
+        move_objects(state)
+        clamp_paddles(state)
+        handle_ball_collision(state)
 
-        if player_rect.top <= 0:
-            player_rect.top = 0
-        elif player_rect.bottom >= 600:
-            player_rect.bottom = 600
+        render(screen, state, assets, font)
 
-        if enemy_rect.top <= 0:
-            enemy_rect.top = 0
-        elif enemy_rect.bottom >= 600:
-            enemy_rect.bottom = 600
-
-        if ball_rect.top <= 0 or ball_rect.bottom >= 600:
-            ball_speed_y *= -1
-        elif ball_rect.left <= 0:
-            ball_rect.center = (400, 300)
-            enemy_score += 1
-            ball_speed_x *= -1
-        elif ball_rect.right >= 800:
-            ball_rect.center = (400, 300)
-            ball_speed_x *= -1
-            player_score += 1
-        elif ball_rect.colliderect(player_rect):
-            ball_speed_x *= -1
-        elif ball_rect.colliderect(enemy_rect):
-            ball_speed_x *= -1
-
-        screen.blit(bg_surf, (0, 0))
-        screen.blit(player_surf, player_rect)
-        screen.blit(enemy_surf, enemy_rect)
-        screen.blit(ball_surf, ball_rect)
-        player_score_surf = score_font.render(f"{player_score}", True, "White")
-        enemy_score_surf = score_font.render(f"{enemy_score}", True, "White")
-        screen.blit(player_score_surf, player_score_rect)
-        screen.blit(enemy_score_surf, enemy_score_rect)
         pygame.display.update()
-        clock.tick(30)
+        clock.tick(FPS)
 
 
 if __name__ == "__main__":
